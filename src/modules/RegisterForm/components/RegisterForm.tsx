@@ -2,12 +2,28 @@ import React from 'react'
 import { MailOutlined, UserOutlined, LockOutlined, InfoCircleTwoTone } from '@ant-design/icons'
 import { Form, Input } from 'antd'
 import { Link } from "react-router-dom"
+import { FormikProps } from 'formik'
 
+import { validateField } from "utils/helpers"
 import { Block, Button } from 'components'
 
 const success = false
 
-const RegisterForm : React.FC = () => (
+interface FormValues {
+  email         : string
+  fullname      : string
+  password      : string
+  confirmed     : string
+}
+
+const RegisterForm = ({
+  values,
+  touched,
+  errors,
+  handleChange,
+  handleBlur,
+  handleSubmit,
+} : FormikProps<FormValues> ) => (
   <div>
     <div className="auth__top">
       <h2>Регистрация</h2>
@@ -15,8 +31,12 @@ const RegisterForm : React.FC = () => (
     </div>
     <Block>
       {!success ? (
-      <Form className="register-form">
-        <Form.Item>
+      <Form onSubmitCapture={handleSubmit} className="register-form">
+        <Form.Item
+          validateStatus={validateField("email", touched, errors)}
+          help={!touched.email ? " " : errors.email}
+          hasFeedback
+        >
           <Input
             id="email"
             prefix={
@@ -25,9 +45,16 @@ const RegisterForm : React.FC = () => (
             size="large"
             type="text"
             placeholder="Email"
+            value={values.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
           />
         </Form.Item>
-        <Form.Item>
+        <Form.Item
+          validateStatus={validateField("fullname", touched, errors)}
+          help={!touched.fullname ? " " : errors.fullname}
+          hasFeedback
+        >
           <Input
             id="fullname"
             prefix={
@@ -36,9 +63,16 @@ const RegisterForm : React.FC = () => (
             size="large"
             type="text"
             placeholder="Ваше имя"
+            value={values.fullname}
+            onChange={handleChange}
+            onBlur={handleBlur}
           />
         </Form.Item>
-        <Form.Item>
+        <Form.Item
+          validateStatus={validateField("password", touched, errors)}
+          help={!touched.password ? " " : errors.password}
+          hasFeedback
+        >
           <Input
             id="password"
             prefix={
@@ -47,9 +81,16 @@ const RegisterForm : React.FC = () => (
             size="large"
             type="password"
             placeholder="Пароль"
+            value={values.password}
+            onChange={handleChange}
+            onBlur={handleBlur}
           />
         </Form.Item>
-        <Form.Item>
+        <Form.Item
+          validateStatus={validateField("confirmed", touched, errors)}
+          help={!touched.confirmed ? " " : errors.confirmed}
+          hasFeedback
+        >
           <Input
             id="confirmed"
             prefix={
@@ -58,10 +99,14 @@ const RegisterForm : React.FC = () => (
             size="large"
             type="password"
             placeholder="Подтвердить пароль"
+            value={values.confirmed}
+            onChange={handleChange}
+            onBlur={handleBlur}
           />
         </Form.Item>
         <Form.Item>
           <Button
+            onClick={handleSubmit}
             type="primary"
             size="large"
           >
